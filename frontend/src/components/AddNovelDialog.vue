@@ -207,7 +207,7 @@
           <p class="text-lg font-medium text-surface-700 dark:text-surface-300 mb-2">
             拖拽文件到这里，或者点击选择文件
           </p>
-          <p class="text-sm text-surface-500 mb-4">支持TXT格式，最大25MB</p>
+          <p class="text-sm text-surface-500 mb-4">支持TXT格式，最大100MB</p>
           <input
             ref="fileInput"
             type="file"
@@ -578,9 +578,9 @@ const handleFileSelect = async (file: File) => {
   //   return
   // }
 
-  const maxSize = 25 * 1024 * 1024 // 25MB
+  const maxSize = 100 * 1024 * 1024 // 100MB
   if (file.size > maxSize) {
-    uploadError.value = '文件大小不能超过25MB'
+    uploadError.value = '文件大小不能超过100MB'
     return
   }
 }
