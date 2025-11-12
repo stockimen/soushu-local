@@ -118,7 +118,7 @@ VITE_FILE_SERVER_BASE=https://example.com
 ```
 frontend/
 ├── public/
-│   └── 轻小说/              # 小说文件存放目录
+│   └── novels/              # 小说文件存放目录
 │       ├── record.json      # 小说索引文件
 │       └── [作者]/          # 按作者分类的小说txt文件
 ├── src/
