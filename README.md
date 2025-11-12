@@ -1,8 +1,67 @@
 # 搜书吧: 大図書館 - 小说阅读器
 
-> 基于 [soushu-local](https://github.com/nekonamic/soushu-local) 增强版本
+> 基于 [soushu-local](https://github.com/nekonamic/soushu-local) v1.0.3 上修改
 
-一个纯前端的在线小说阅读和搜索应用，支持本地txt文件的全文搜索和阅读体验优化。在原项目基础上新增了繁简转换、文本乱码处理、章节优化等高级功能。
+支持免数据库使用，直接放置 txt 文件到目录。支持调用 API 进行搜索与获取文件。
+
+一个纯前端的在线小说阅读和搜索应用，支持本地txt文件的全文搜索和阅读体验优化。在原项目 v1.0.3 基础上新增了繁简转换、文本乱码处理、目录列表、下载缓存、缓存管理、文件上传、随机推荐等功能。
+
+<img width="80%"  alt="PixPin_2025-11-12_17-35-20" src="https://github.com/user-attachments/assets/bcc2ae9a-72a3-47b2-bb3e-c226276fa25b" />
+
+<details>
+    <summary>手机端预览</summary>
+<table style="width: 100%; border-collapse: collapse;">
+  <tr>
+    <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="502" height="1014" alt="PixPin_2025-11-12_17-06-46" src="https://github.com/user-attachments/assets/4ff4dcd5-1c77-4014-a39a-fb41ac947af1" />
+    </td>
+    <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="502" height="1014" alt="PixPin_2025-11-12_17-08-19" src="https://github.com/user-attachments/assets/2cdbcd84-7824-41b9-ae4c-41373c672f9b" />
+    </td>
+    <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="502" height="1014" alt="PixPin_2025-11-12_17-18-31" src="https://github.com/user-attachments/assets/d4a9a5f1-77d8-472d-b429-a8d5fe53710d" />
+    </td>
+    <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="502" height="1014" alt="PixPin_2025-11-12_17-18-13" src="https://github.com/user-attachments/assets/a3f0ca88-cadb-407b-b564-38ba5546c7f7" />
+    </td>
+    <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="502" height="1014" alt="PixPin_2025-11-12_17-17-10" src="https://github.com/user-attachments/assets/0315bf78-3a84-46dc-9264-7fd431dac43b" />
+    </td>
+  </tr>
+</table>
+
+</details>
+    
+<details>
+    <summary>桌面端预览</summary>
+    <table style="width: 100%; border-collapse: collapse;">
+  <tr>
+    <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="1252" height="789" alt="PixPin_2025-11-12_17-26-48" src="https://github.com/user-attachments/assets/464cd901-22ed-48aa-9118-8a1bce9ec39f" />
+    </td>
+    <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="1252" height="789" alt="PixPin_2025-11-12_17-27-26" src="https://github.com/user-attachments/assets/db9fa3aa-042f-4c1b-bfc8-d23f7aa19f82" />
+    </td>
+    <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="1252" height="789" alt="PixPin_2025-11-12_17-33-38" src="https://github.com/user-attachments/assets/b70eeb64-c67a-424a-bba1-65a1e8d30b87" />
+    </td>
+  </tr>
+  <tr>
+    <td style="width: 50%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="1252" height="789" alt="PixPin_2025-11-12_17-27-48" src="https://github.com/user-attachments/assets/f746d7c5-e31e-4ac0-aee0-9cc39b0760fb" />
+    </td>
+    <td style="width: 50%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="1252" height="789" alt="PixPin_2025-11-12_17-29-22" src="https://github.com/user-attachments/assets/9af051dc-c32f-4c5e-9b08-c149039c4576" />
+    </td>
+    <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img width="1252" height="789" alt="PixPin_2025-11-12_17-31-05" src="https://github.com/user-attachments/assets/3d253a33-47f7-4665-839d-b4a958e72d8e" />
+    </td>
+  </tr>
+
+ 
+</table>
+  
+</details>
 
 ## 🌟 特性
 
@@ -127,8 +186,9 @@ pnpm preview
 ```json
 [
   [
-    "小说标题~~文件大小",
-    "作者/文件名.txt"
+    "作者/文件名.txt",
+    "大小",
+    "字数"
   ]
 ]
 ```
@@ -137,8 +197,19 @@ pnpm preview
 ```json
 [
   [
-    "关于我转生变成史莱姆这档事01~~420KB",
-    "伏濑/关于我转生变成史莱姆这档事01.txt"
+    "测试/繁体转简体测试.txt",
+    "2.25KB",
+    "827字"
+  ],
+  [
+    "测试/乱码测试.txt",
+    "2.67KB",
+    "1044字"
+  ],
+  [
+    "测试/record.txt",
+    "146B",
+    "112字"
   ]
 ]
 ```
@@ -158,7 +229,6 @@ pnpm preview
 
 - **内容缓存**: 小于5MB的文件会自动缓存
 - **缓存时间**: 默认24小时过期（手动缓存不会过期）
-- **存储限制**: 最大50MB缓存空间
 
 ### 搜索设置
 
