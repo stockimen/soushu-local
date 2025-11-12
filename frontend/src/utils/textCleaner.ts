@@ -18,12 +18,6 @@ export class TextCleaner {
     /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,
     // 常见的乱码符号组合（包含测试文本中的字符）
     /[����ƮŮ]/g,
-    // 更精确的乱码字符范围（只包含确定的控制字符和乱码）
-    /[\u0080-\u009f]/g,
-    // 连续的特殊字符（可能是乱码）- 明确包含emoji范围
-    /[^\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\uff00-\uffef\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\uff01-\uff5e\u2000-\u206f\u2e80-\u2eff\u2f00-\u2fdf\u2600-\u26ff\u2700-\u27bf\u1f300-\u1f9ff\u1f600-\u1f64f\u1f300-\u1f5ff\u1f680-\u1f6ff\u1f1e0-\u1f1ff\u1f900-\u1f9ff\u1fa70-\u1faff\s\d\w\.,!?;:()[\]{}'"。，！？；：（）【】""''\n\r\t]{3,}/g,
-    // 孤立的异常字符
-    /(?<![\u4e00-\u9fff\u3000-\u303f\uff00-\uffef])[��Ů����Ʈ](?![\u4e00-\u9fff\u3000-\u303f\uff00-\uffef])/g,
   ];
 
   /**
@@ -66,8 +60,10 @@ export class TextCleaner {
       removedChars += before2 - cleanedText.length;
     }
 
-    // 清理连续的特殊字符（可能是乱码）
-    const consecutiveSpecialChars = /[^\u4e00-\u9fff\u3000-\u303f\uff00-\uffef\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\uff01-\uff5e\s\d\w\.,!?;:()[\]{}'"。，！？；：（）【】""'']/g;
+
+    // 修复后的正则表达式 - 正确保护标点符号
+    const consecutiveSpecialChars = /[^\u4e00-\u9fff\u3000-\u303f\uff00-\uffef\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\uff01-\uff5e\s\d\w\.,!?;:()[\]{}\p{P}]/gu;
+
     cleanedText = cleanedText.replace(consecutiveSpecialChars, (match) => {
       // 如果匹配的字符太多，可能是乱码，直接删除
       if (match.length > 5) {
@@ -145,7 +141,7 @@ export class TextCleaner {
     }
 
     // 检测连续的特殊字符
-    if (/[^\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\uff00-\uffef\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\uff01-\uff5e\u2000-\u206f\u2e80-\u2eff\u2f00-\u2fdf\u2600-\u26ff\u2700-\u27bf\u1f300-\u1f9ff\u1f600-\u1f64f\u1f300-\u1f5ff\u1f680-\u1f6ff\u1f1e0-\u1f1ff\u1f900-\u1f9ff\u1fa70-\u1faff\s\d\w\.,!?;:()[\]{}'"。，！？；：（）【】""''\n\r\t]{5,}/.test(text)) {
+    if (/[^\u4e00-\u9fff\s\d\w\.,!?;:()[\]{}'"。，！？；：（）【】""'']{5,}/.test(text)) {
       patterns.push('连续特殊字符');
       severity = severity === 'high' ? 'high' : 'medium';
     }
