@@ -13,54 +13,53 @@
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
     <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="502" height="1014" alt="PixPin_2025-11-12_17-06-46" src="https://github.com/user-attachments/assets/4ff4dcd5-1c77-4014-a39a-fb41ac947af1" />
+      <img alt="PixPin_2025-11-12_17-06-46" src="https://github.com/user-attachments/assets/4ff4dcd5-1c77-4014-a39a-fb41ac947af1" />
     </td>
     <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="502" height="1014" alt="PixPin_2025-11-12_17-08-19" src="https://github.com/user-attachments/assets/2cdbcd84-7824-41b9-ae4c-41373c672f9b" />
+      <img alt="PixPin_2025-11-12_17-08-19" src="https://github.com/user-attachments/assets/2cdbcd84-7824-41b9-ae4c-41373c672f9b" />
     </td>
     <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="502" height="1014" alt="PixPin_2025-11-12_17-18-31" src="https://github.com/user-attachments/assets/d4a9a5f1-77d8-472d-b429-a8d5fe53710d" />
+      <img  alt="PixPin_2025-11-12_17-18-31" src="https://github.com/user-attachments/assets/d4a9a5f1-77d8-472d-b429-a8d5fe53710d" />
     </td>
     <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="502" height="1014" alt="PixPin_2025-11-12_17-18-13" src="https://github.com/user-attachments/assets/a3f0ca88-cadb-407b-b564-38ba5546c7f7" />
+      <img  alt="PixPin_2025-11-12_17-18-13" src="https://github.com/user-attachments/assets/a3f0ca88-cadb-407b-b564-38ba5546c7f7" />
     </td>
     <td style="width: 20%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="502" height="1014" alt="PixPin_2025-11-12_17-17-10" src="https://github.com/user-attachments/assets/0315bf78-3a84-46dc-9264-7fd431dac43b" />
+      <img  alt="PixPin_2025-11-12_17-17-10" src="https://github.com/user-attachments/assets/0315bf78-3a84-46dc-9264-7fd431dac43b" />
     </td>
   </tr>
 </table>
-
 </details>
     
+
 <details>
     <summary>桌面端预览</summary>
     <table style="width: 100%; border-collapse: collapse;">
   <tr>
     <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="1252" height="789" alt="PixPin_2025-11-12_17-26-48" src="https://github.com/user-attachments/assets/464cd901-22ed-48aa-9118-8a1bce9ec39f" />
+      <img  alt="PixPin_2025-11-12_17-26-48" src="https://github.com/user-attachments/assets/464cd901-22ed-48aa-9118-8a1bce9ec39f" />
     </td>
     <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="1252" height="789" alt="PixPin_2025-11-12_17-27-26" src="https://github.com/user-attachments/assets/db9fa3aa-042f-4c1b-bfc8-d23f7aa19f82" />
+      <img  alt="PixPin_2025-11-12_17-27-26" src="https://github.com/user-attachments/assets/db9fa3aa-042f-4c1b-bfc8-d23f7aa19f82" />
     </td>
     <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="1252" height="789" alt="PixPin_2025-11-12_17-33-38" src="https://github.com/user-attachments/assets/b70eeb64-c67a-424a-bba1-65a1e8d30b87" />
+      <img  alt="PixPin_2025-11-12_17-33-38" src="https://github.com/user-attachments/assets/b70eeb64-c67a-424a-bba1-65a1e8d30b87" />
     </td>
   </tr>
   <tr>
-    <td style="width: 50%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="1252" height="789" alt="PixPin_2025-11-12_17-27-48" src="https://github.com/user-attachments/assets/f746d7c5-e31e-4ac0-aee0-9cc39b0760fb" />
-    </td>
-    <td style="width: 50%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="1252" height="789" alt="PixPin_2025-11-12_17-29-22" src="https://github.com/user-attachments/assets/9af051dc-c32f-4c5e-9b08-c149039c4576" />
+    <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img  alt="PixPin_2025-11-12_17-27-48" src="https://github.com/user-attachments/assets/f746d7c5-e31e-4ac0-aee0-9cc39b0760fb" />
     </td>
     <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
-      <img width="1252" height="789" alt="PixPin_2025-11-12_17-31-05" src="https://github.com/user-attachments/assets/3d253a33-47f7-4665-839d-b4a958e72d8e" />
+      <img  alt="PixPin_2025-11-12_17-29-22" src="https://github.com/user-attachments/assets/9af051dc-c32f-4c5e-9b08-c149039c4576" />
+    </td>
+    <td style="width: 33%; text-align: center; padding: 10px; border: 1px solid #ddd;">
+      <img  alt="PixPin_2025-11-12_17-31-05" src="https://github.com/user-attachments/assets/3d253a33-47f7-4665-839d-b4a958e72d8e" />
     </td>
   </tr>
-
- 
 </table>
-  
+
+
 </details>
 
 
@@ -118,30 +117,66 @@ VITE_FILE_SERVER_BASE=https://example.com
 ## 📁 项目结构
 
 ```
-frontend/
-├── public/
-│   └── novels/              # 小说文件存放目录
-│       ├── record.json      # 小说索引文件
-│       └── [作者]/          # 按作者分类的小说txt文件
-├── src/
-│   ├── api/
-│   │   └── main.ts          # API接口（前端实现）
-│   ├── components/
-│   │   ├── HomeTopBar.vue   # 首页顶部导航
-│   │   └── ViewerTopBar.vue # 阅读器顶部导航
-│   ├── data/
-│   │   └── novels.ts        # 小说数据管理器
-│   ├── store/
-│   │   ├── novel.ts         # 小说状态管理
-│   │   └── search.ts        # 搜索状态管理
-│   ├── utils/
-│   │   ├── fileLoader.ts    # 文件加载器
-│   │   └── cacheManager.ts  # 缓存管理器
-│   └── views/
-│       ├── Home.vue         # 首页
-│       ├── SearchDoc.vue    # 搜索页面
-│       └── Viewer.vue       # 阅读器页面
-└── package.json
+soushu-local/
+├── README.md                           # 项目说明文档
+├── .gitignore                         # Git 忽略文件配置
+├── Dockerfile                        # Docker 容器配置文件
+├── backend/                           # 后端 Rust 服务目录
+│   ├── Cargo.lock                    # Rust 锁定依赖文件
+│   ├── Cargo.toml                    # Rust 项目配置文件
+│   └── src/                          # Rust 源代码
+│       └── main.rs                   # 主程序入口
+└── frontend/                         # 前端 Vue 应用目录
+    ├── .env                          # 环境变量配置
+    ├── .env.example                  # 环境变量示例
+    ├── package.json                  # 前端项目配置
+    ├── vite.config.ts                # Vite 构建配置
+    ├── public/                       # 静态资源目录
+    │   ├── img/                      # 公共图片
+    │   └── novels/                   # 小说文件存放目录
+    │       ├── record.json           # 小说索引文件
+    │       └── [作者]/               # 按作者分类的小说txt文件
+    ├── scripts/                      # 脚本文件目录
+    │   ├── generate-record.js        # 生成记录脚本
+    │   └── update-version.js         # 更新版本脚本
+    └── src/                          # 源代码目录
+        ├── api/                      # API 接口封装
+        │   └── main.ts               # 主要 API 接口
+        ├── assets/                   # 静态资源
+        │   └── main.css              # 主样式文件
+        ├── components/               # Vue 组件
+        │   ├── AddNovelDialog.vue    # 添加小说对话框
+        │   ├── ApiSettingsDialog.vue # API 设置对话框
+        │   ├── HomeTopBar.vue        # 首页顶部导航
+        │   ├── TocRulesManager.vue   # 目录规则管理器
+        │   └── ViewerTopBar.vue      # 阅读器顶部导航
+        ├── composables/              # Vue 组合式函数
+        │   └── useLayout.ts          # 布局管理函数
+        ├── data/                     # 数据文件
+        │   └── novels.ts             # 小说数据管理
+        ├── router/                   # Vue Router 路由配置
+        │   └── index.ts              # 主路由配置
+        ├── store/                    # Pinia 状态管理
+        │   ├── app.ts                # 应用状态管理
+        │   ├── novel.ts              # 小说状态管理
+        │   └── search.ts             # 搜索状态管理
+        ├── stores/                   # Pinia store 配置
+        │   └── auth.ts               # 认证状态管理
+        ├── types/                    # TypeScript 类型定义
+        │   ├── Fav.ts                # 收藏类型定义
+        │   ├── Progress.ts           # 进度类型定义
+        │   └── opencc-js.d.ts        # OpenCC 类型声明
+        ├── utils/                    # 工具函数
+        │   ├── cacheManager.ts       # 缓存管理器
+        │   └── chineseConverter.ts   # 中文转换器
+        ├── views/                    # Vue 页面组件
+        │   ├── CacheManager.vue      # 缓存管理页面
+        │   ├── Home.vue              # 首页
+        │   ├── SearchDoc.vue         # 搜索页面
+        │   └── Viewer.vue            # 阅读器页面
+        ├── App.vue                   # 应用根组件
+        ├── main.ts                   # 应用入口文件
+        └── env.d.ts                  # 环境变量类型定义
 ```
 
 ## 🚀 快速开始
@@ -271,3 +306,14 @@ pnpm preview
 - [OpenCC](https://github.com/BYVoid/OpenCC) - 高质量的中文转换库
 - [Vue.js](https://vuejs.org/) 和相关生态
 - 所有开源社区的支持
+
+## ⚠️ 免责声明
+
+本项目仅作为技术交流和学习研究之用，不提供任何形式的小说资源或内容。
+
+- **内容来源**：用户需自行提供小说文件，本软件仅为阅读工具
+- **版权责任**：使用者应遵守相关法律法规，尊重知识产权
+- **使用限制**：请勿将本软件用于任何商业用途或非法传播
+- **技术目的**：本项目旨在展示前端技术能力，促进技术交流学习
+
+使用本软件所产生的一切后果由使用者自行承担，项目开发者不承担任何责任。
