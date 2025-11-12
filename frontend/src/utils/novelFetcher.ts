@@ -410,10 +410,10 @@ class NovelFetcher {
     //   throw new Error('只支持TXT文件格式')
     // }
 
-    // 验证文件大小（25MB限制）
-    const maxSize = 25 * 1024 * 1024
+    // 验证文件大小（100MB限制）
+    const maxSize = 100 * 1024 * 1024
     if (file.size > maxSize) {
-      throw new Error('文件大小不能超过25MB')
+      throw new Error('文件大小不能超过100MB')
     }
 
     try {

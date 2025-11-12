@@ -81,10 +81,14 @@ const processContent = async () => {
   isProcessingContent.value = true;
 
   try {
-    // 自动清理乱码字符
-    const cleaningResult = autoCleanText(content);
-    if (cleaningResult.wasCleaned) {
-      content = cleaningResult.text;
+    // 只有当内容来自原始数据时才进行乱码清理
+    // processedContentData.value 已经在 generateToc 中清理过
+    if (!processedContentData.value && data.value?.content) {
+      // 自动清理乱码字符
+      const cleaningResult = autoCleanText(content);
+      if (cleaningResult.wasCleaned) {
+        content = cleaningResult.text;
+      }
     }
 
     // 应用繁简转换
@@ -324,7 +328,8 @@ const generateToc = () => {
 
     // 如果是章节行，在前面添加锚点标记并加粗章节标题的前面部分
     if (isChapter) {
-      const elementId = `chapter-${chapterIndex - 1}`;
+      // 使用已生成的elementId，确保一致性
+      const elementId = chapters[chapters.length - 1]?.elementId;
       // 只对前30个字符加粗
       const boldLength = Math.min(30, line.length);
       const boldPart = line.substring(0, boldLength);
@@ -473,24 +478,30 @@ const generateTocByWordCount = (wordsPerChapter: number, showFirstSentence: bool
 const scrollToChapter = (chapter: { title: string; position: number; elementId: string }, index: number) => {
   currentChapterIndex.value = index;
 
-  // 首先尝试使用锚点跳转
-  const element = document.getElementById(chapter.elementId);
-  if (element) {
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  } else {
-    // 如果锚点不存在，回退到计算位置
-    const doc = document.documentElement;
-    const scrollHeight = doc.scrollHeight - doc.clientHeight;
-    const targetPosition = (chapter.position / data.value!.content.length) * scrollHeight;
+  // 等待DOM更新后再查找锚点
+  nextTick(() => {
+    // 首先尝试使用锚点跳转
+    const element = document.getElementById(chapter.elementId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    } else {
+      // 如果锚点不存在，回退到计算位置
+      // 使用处理后的内容长度而不是原始内容长度
+      const processedContent = processedContentData.value || data.value?.content || '';
+      const contentLength = processedContent.length || data.value!.content.length;
+      const doc = document.documentElement;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const targetPosition = (chapter.position / contentLength) * scrollHeight;
 
-    window.scrollTo({
-      top: targetPosition,
-      behavior: 'smooth'
-    });
-  }
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }
+  });
 
   // 更新当前章节信息
   currentChapterTitle.value = chapter.title;
@@ -912,7 +923,7 @@ onMounted(async () => {
   // 统一加载逻辑：缓存优先
   await loadNovelContent(identifier);
 
-  await nextTick();
+
 
   // 如果内容已加载且有目录规则，生成目录
   if (data.value?.content && tocRules.value.length > 0) {
@@ -921,7 +932,7 @@ onMounted(async () => {
 
   // 处理内容转换
   processContent();
-
+  await nextTick();
   const tid = Number(route.params.tid);
   const index = progressStore.value.findIndex(item => item.tid === tid)
 
@@ -935,6 +946,18 @@ onMounted(async () => {
     });
   }
 
+  // 添加滚动事件监听器，用于更新当前章节
+  const handleScroll = () => {
+    updateCurrentChapter();
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+
+  // 保存清理函数
+  (window as any)._scrollCleanup = () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+
   // 提供全局方法供其他组件获取当前小说内容
   (window as any).getCurrentNovelContent = (): string | null => {
     return data.value?.content || null;
@@ -945,6 +968,12 @@ onUnmounted(() => {
   novelStore.tid = 0;
   novelStore.title = "";
   novelStore.isLoading = true;
+
+  // 清理滚动事件监听器
+  if ((window as any)._scrollCleanup) {
+    (window as any)._scrollCleanup();
+    delete (window as any)._scrollCleanup;
+  }
 
   // 清理滚动事件监听器
   if ((window as any)._progressCleanup) {

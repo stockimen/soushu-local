@@ -31,7 +31,6 @@ interface UserPreferences {
 class CacheManager {
   private readonly CACHE_PREFIX = 'novel_reader_'
   private readonly DEFAULT_TTL = 24 * 60 * 60 * 1000 // 24小时
-  private readonly MAX_CACHE_SIZE = 50 * 1024 * 1024 // 50MB
 
   // 缓存操作
   set<T>(key: string, data: T, ttl: number = this.DEFAULT_TTL): void {
