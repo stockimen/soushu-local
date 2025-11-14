@@ -46,6 +46,25 @@ export async function searchNovelsApi(
   return response.json();
 }
 
+// API模式的随机推荐实现
+export async function randomNovelsApi(
+): Promise<{
+	total: number;
+	page: number;
+	page_size: number;
+	records: Array<{
+		tid: number;
+		title: string;
+		count: number;
+	}>;
+}> {
+	const response = await fetch(`${apiBase}/api/random`);
+	if (!response.ok) {
+		throw new Error("请求失败");
+	}
+	return response.json();
+}
+
 // API模式的小说内容获取
 export async function getNovelApi(tid: number): Promise<{
   tid: number;
@@ -226,11 +245,7 @@ export async function getAllNovelList(): Promise<Record[]> {
 
 // 随机推荐小说（API模式）
 export async function getRandomRecommendations(): Promise<PagedResult<Record>> {
-	// 随机生成页码 1-6993
-	const randomPage = Math.floor(Math.random() * 6993) + 1;
-
-	// 使用中文句号作为关键词进行正文搜索
-	const response = await searchNovelsApi('content', '。', randomPage);
+	const response = await randomNovelsApi();
 
 	// 转换API响应为Record格式
 	const records: Record[] = response.records.map(item => ({

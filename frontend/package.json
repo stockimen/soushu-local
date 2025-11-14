@@ -9,14 +9,10 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/update-version.js && run-p type-check \"build-only {@}\" --",
-    "build:prod": "NODE_ENV=production node scripts/update-version.js && run-p type-check \"build-only {@}\" --",
-    "build:dev": "NODE_ENV=development node scripts/update-version.js && run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "update-version": "node scripts/update-version.js",
-    "update-version:prod": "NODE_ENV=production node scripts/update-version.js",
-    "update-version:dev": "NODE_ENV=development node scripts/update-version.js",
     "generate-record": "node scripts/generate-record.js"
   },
   "dependencies": {

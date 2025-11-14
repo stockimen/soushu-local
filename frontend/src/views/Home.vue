@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { onMounted, onUnmounted, ref, computed, nextTick } from "vue";
+import {useRouter} from "vue-router";
+import {onMounted, onUnmounted, ref, computed, nextTick} from "vue";
 import InputText from "primevue/inputtext";
 import RadioButton from "primevue/radiobutton";
 import RadioButtonGroup from "primevue/radiobuttongroup";
@@ -15,28 +15,28 @@ import {
   type Record,
   getNovelApi
 } from "@/api/main";
-import { getRandomNovels, getNovelById } from "@/data/novels";
-import { formatAuthorName } from "@/utils/pathHelper";
+import {getRandomNovels, getNovelById} from "@/data/novels";
+import {formatAuthorName} from "@/utils/pathHelper";
 import Skeleton from "primevue/skeleton";
-import { useSearchStore } from "@/store/search";
+import {useSearchStore} from "@/store/search";
 import Message from "primevue/message";
 import Form from "@primevue/forms/form";
-import { useToast } from "primevue/usetoast";
+import {useToast} from "primevue/usetoast";
 import Drawer from "primevue/drawer";
 import Button from "primevue/button";
 import HomeTopBar from "@/components/HomeTopBar.vue";
-import type { Fav } from "@/types/Fav";
-import { useConfirm } from "primevue/useconfirm";
-import { registerSW } from "virtual:pwa-register";
+import type {Fav} from "@/types/Fav";
+import {useConfirm} from "primevue/useconfirm";
+import {registerSW} from "virtual:pwa-register";
 import ProgressBar from 'primevue/progressbar';
-import { useLocalStorage } from "@vueuse/core";
-import type { Progress } from "@/types/Progress";
+import {useLocalStorage} from "@vueuse/core";
+import type {Progress} from "@/types/Progress";
 import AddNovelDialog from "@/components/AddNovelDialog.vue";
 import ApiSettingsDialog from "@/components/ApiSettingsDialog.vue";
-import type { CachedNovel } from "@/data/novels";
-import { useAppStore } from "@/store/app";
-import { novelCacheManager } from "@/utils/novelCacheManager";
-import { getNovel } from "@/api/main";
+import type {CachedNovel} from "@/data/novels";
+import {useAppStore} from "@/store/app";
+import {novelCacheManager} from "@/utils/novelCacheManager";
+import {getNovel} from "@/api/main";
 
 const favorites = useLocalStorage<Fav[]>('favorites', [])
 const history = useLocalStorage<string[]>('history', [])
@@ -53,7 +53,7 @@ const showSuggestions = ref(false)
 const filteredHistory = computed(() => {
   if (!searchStore.keyword) return [];
   return history.value.filter(h =>
-    h.toLowerCase().includes(searchStore.keyword.toLowerCase())
+      h.toLowerCase().includes(searchStore.keyword.toLowerCase())
   );
 });
 
@@ -98,8 +98,6 @@ const offset = ref(0);
 
 // 随机推荐相关状态
 const isLoadingRandom = ref(false);
-const showRandomResults = ref(false);
-const randomResults = ref<Record[]>([]);
 
 const isFav = (tid: number) => favorites.value.some((f) => f.tid === tid);
 
@@ -110,7 +108,7 @@ const cachingNovels = ref<Set<number>>(new Set());
 const cachedNovels = ref<Set<number>>(new Set());
 
 const addFav = (tid: number, title: string) => {
-  const fav: Fav = { tid, title };
+  const fav: Fav = {tid, title};
   if (!isFav(tid)) {
     favorites.value.push(fav);
   }
@@ -168,7 +166,7 @@ const cacheNovel = async (tid: number, title: string) => {
       if (!novelInfo) {
         const novel = await getNovelApi(tid);
         content = novel.content;
-      } else{
+      } else {
         const novel = await getNovel(tid);
         content = novel.content;
         author = novelInfo?.author || '';
@@ -383,9 +381,9 @@ async function fetchData(isNewSearch: boolean) {
       // API模式搜索
       const apiTarget = searchStore.target === 'author' ? 'title' : searchStore.target;
       const apiRes = await searchNovelsApi(
-        apiTarget as 'title' | 'content' | 'both',
-        searchStore.keyword,
-        searchStore.page,
+          apiTarget as 'title' | 'content' | 'both',
+          searchStore.keyword,
+          searchStore.page,
       );
 
       // 转换API响应为Record类型
@@ -404,9 +402,9 @@ async function fetchData(isNewSearch: boolean) {
     } else {
       // 前端模式搜索（支持标题、作者、全部）
       res = await searchNovels(
-        searchStore.target,
-        searchStore.keyword,
-        searchStore.page,
+          searchStore.target,
+          searchStore.keyword,
+          searchStore.page,
       );
     }
 
@@ -474,22 +472,20 @@ const clearSearch = () => {
 // 随机推荐小说
 const fetchRandomRecommendations = async () => {
   isLoadingRandom.value = true;
-  showRandomResults.value = false;
-  randomResults.value = [];
 
   try {
     let res;
 
     if (appStore.isApiMode) {
-      // API模式：使用中文句号搜索
       res = await getRandomRecommendations();
-      randomResults.value = res.records;
+      searchStore.records = res.records;
+      searchStore.total = res.total;
     } else {
       // 纯前端模式：从本地小说中随机选择
-      const randomNovels = await getRandomNovels(9);
+      const randomNovels = await getRandomNovels(18);
       console.log(randomNovels);
       // 转换为Record格式
-      randomResults.value = randomNovels.map(item => {
+      searchStore.records = randomNovels.map(item => {
         const novel = getNovelById(item.id);
         return {
           tid: item.id,
@@ -499,16 +495,15 @@ const fetchRandomRecommendations = async () => {
           pathParts: novel?.pathParts
         };
       });
+      searchStore.total = randomNovels.length;
     }
 
-    showRandomResults.value = true;
-
-    // toast.add({
-    //   severity: "success",
-    //   summary: "随机推荐",
-    //   detail: appStore.isApiMode ? "已为您推荐随机小说" : "已从本地库中随机推荐",
-    //   life: 2000,
-    // });
+    toast.add({
+      severity: "success",
+      summary: "随机推荐",
+      detail: appStore.isApiMode ? "已为您推荐随机小说" : "已从本地库中随机推荐",
+      life: 2000,
+    });
 
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : '随机推荐失败';
@@ -523,31 +518,25 @@ const fetchRandomRecommendations = async () => {
     isLoadingRandom.value = false;
   }
 };
-
-// 返回搜索模式
-const backToSearch = () => {
-  showRandomResults.value = false;
-  randomResults.value = [];
-};
 </script>
 
 <template>
   <div>
     <HomeTopBar
-      :showAddNovelDialog="showAddNovelDialog"
-      :favorites="favorites"
-      :drawerVisible="drawerVisible"
-      @update:showAddNovelDialog="showAddNovelDialog = $event"
-      @update:drawerVisible="drawerVisible = $event"
+        :showAddNovelDialog="showAddNovelDialog"
+        :favorites="favorites"
+        :drawerVisible="drawerVisible"
+        @update:showAddNovelDialog="showAddNovelDialog = $event"
+        @update:drawerVisible="drawerVisible = $event"
     />
     <Drawer v-model:visible="drawerVisible" header="收藏夹" position="left" :dismissable="true"
-      class="w-full! md:w-80! lg:w-120! bg-surface-50! dark:bg-surface-700!">
+            class="w-full! md:w-80! lg:w-120! bg-surface-50! dark:bg-surface-700!">
       <div v-if="favorites.length === 0" class="text-center text-gray-500 mt-4">
         暂无收藏
       </div>
       <div class="flex flex-col gap-4" v-else>
         <a v-for="item in favorites" :key="item.tid" :href="`/${item.tid}`" @click="e => handleCardClick(e, item.tid)"
-          class="block">
+           class="block">
           <Card class="transition-colors duration-200 hover:bg-surface-100! dark:hover:bg-surface-900! cursor-pointer">
             <template #title>
               <div class="flex justify-between">
@@ -555,34 +544,34 @@ const backToSearch = () => {
                 <div class="flex items-center gap-2">
                   <!-- 缓存按钮 -->
                   <Button
-                    @click.stop.prevent="cacheNovel(item.tid, item.title)"
-                    :disabled="cachingNovels.has(item.tid)"
-                    :loading="cachingNovels.has(item.tid)"
-                    size="small"
-                    severity="secondary"
-                    text
-                    rounded
-                    :title="cachedNovels.has(item.tid) ? '已缓存' : '缓存到本地'"
-                    class="w-8 h-8 p-0"
+                      @click.stop.prevent="cacheNovel(item.tid, item.title)"
+                      :disabled="cachingNovels.has(item.tid)"
+                      :loading="cachingNovels.has(item.tid)"
+                      size="small"
+                      severity="secondary"
+                      text
+                      rounded
+                      :title="cachedNovels.has(item.tid) ? '已缓存' : '缓存到本地'"
+                      class="w-8 h-8 p-0"
                   >
                     <i :class="[
                       cachingNovels.has(item.tid) ? 'pi pi-spin pi-spinner' :
                       cachedNovels.has(item.tid) ? 'pi pi-check' : 'pi pi-download'
                     ]"
-                    :style="{
+                       :style="{
                       color: cachedNovels.has(item.tid) ? 'var(--p-green-500)' : 'var(--p-text-color)'
                     }"></i>
                   </Button>
                   <!-- 收藏按钮 -->
                   <i v-if="isFav(item.tid)" class="pi pi-star-fill" @click.stop.prevent="removeFav(item.tid)"
-                    :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
+                     :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
                   <i v-else class="pi pi-star" @click.stop.prevent="addFav(item.tid, item.title)"
-                    :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
+                     :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
                 </div>
               </div>
             </template>
             <template #content>
-              <ProgressBar :value="Math.floor(progress.find(p => p.tid === item.tid)?.progress ?? 0)" />
+              <ProgressBar :value="Math.floor(progress.find(p => p.tid === item.tid)?.progress ?? 0)"/>
             </template>
           </Card>
         </a>
@@ -592,7 +581,7 @@ const backToSearch = () => {
       <div class=" flex flex-col items-center justify-center ">
         <div class=" flex flex-col items-center justify-center mt-25 md:mb-10 mb-4">
           <h1
-            class=" text-5xl font-bold bg-linear-to-bl from-violet-500 to-fuchsia-500 text-transparent bg-clip-text p-1 text-center px-4">
+              class=" text-5xl font-bold bg-linear-to-bl from-violet-500 to-fuchsia-500 text-transparent bg-clip-text p-1 text-center px-4">
             <span class="block sm:inline">搜书吧<span class="hidden sm:inline">：</span></span>
             <span class="block sm:inline mt-2 sm:mt-0">大図書館</span>
           </h1>
@@ -606,45 +595,45 @@ const backToSearch = () => {
               <!-- 自定义搜索输入框 -->
               <div class="relative">
                 <InputText
-                  ref="searchInputRef"
-                  v-model="searchStore.keyword"
-                  placeholder="搜索..."
-                  class="w-full pr-24"
-                  :style="{ fontSize: '16px' }"
-                  @keyup.enter="fetchData(true)"
-                  @focus="showSuggestions = true"
-                  @blur="hideSuggestions"
+                    ref="searchInputRef"
+                    v-model="searchStore.keyword"
+                    placeholder="搜索..."
+                    class="w-full pr-24"
+                    :style="{ fontSize: '16px' }"
+                    @keyup.enter="fetchData(true)"
+                    @focus="showSuggestions = true"
+                    @blur="hideSuggestions"
                 />
                 <!-- 清除按钮 -->
                 <button
-                  v-if="searchStore.keyword"
-                  type="button"
-                  @click="clearSearch"
-                  class="absolute right-10 top-1/2 transform -translate-y-1/2 p-2 text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200 transition-colors"
-                  title="清除搜索"
+                    v-if="searchStore.keyword"
+                    type="button"
+                    @click="clearSearch"
+                    class="absolute right-10 top-1/2 transform -translate-y-1/2 p-2 text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200 transition-colors"
+                    title="清除搜索"
                 >
                   <i class="pi pi-times text-lg"></i>
                 </button>
                 <!-- 放大镜图标 -->
                 <button
-                  type="button"
-                  @click="fetchData(true)"
-                  class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200 transition-colors"
-                  title="搜索"
+                    type="button"
+                    @click="fetchData(true)"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200 transition-colors"
+                    title="搜索"
                 >
                   <i class="pi pi-search text-lg"></i>
                 </button>
 
                 <!-- 搜索历史下拉 -->
                 <div
-                  v-if="showSuggestions && searchStore.keyword && filteredHistory.length > 0"
-                  class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto"
+                    v-if="showSuggestions && searchStore.keyword && filteredHistory.length > 0"
+                    class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto"
                 >
                   <!-- 清空历史记录按钮 -->
                   <div
-                    v-if="filteredHistory.length > 1"
-                    @mousedown="clearSearchHistory"
-                    class="px-4 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer text-sm flex items-center justify-between border-b border-surface-200 dark:border-surface-700 text-red-600 dark:text-red-400"
+                      v-if="filteredHistory.length > 1"
+                      @mousedown="clearSearchHistory"
+                      class="px-4 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer text-sm flex items-center justify-between border-b border-surface-200 dark:border-surface-700 text-red-600 dark:text-red-400"
                   >
                     <span class="flex items-center">
                       <i class="pi pi-trash mr-2"></i>
@@ -655,30 +644,30 @@ const backToSearch = () => {
                     </span>
                   </div>
                   <div
-                    v-for="(item, index) in filteredHistory"
-                    :key="index"
-                    class="group px-4 py-2 hover:bg-surface-100 dark:hover:bg-surface-700 cursor-pointer text-sm flex items-center justify-between"
+                      v-for="(item, index) in filteredHistory"
+                      :key="index"
+                      class="group px-4 py-2 hover:bg-surface-100 dark:hover:bg-surface-700 cursor-pointer text-sm flex items-center justify-between"
                   >
                     <div
-                      @mousedown="selectHistory(item)"
-                      class="flex items-center flex-1 min-w-0"
+                        @mousedown="selectHistory(item)"
+                        class="flex items-center flex-1 min-w-0"
                     >
                       <i class="pi pi-history mr-2 text-surface-400 flex-shrink-0"></i>
                       <span class="truncate">{{ item }}</span>
                     </div>
                     <button
-                      @mousedown.stop="removeSearchHistoryItem(item, $event)"
-                      class="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded text-red-500 dark:text-red-400 transition-all sm:opacity-0 sm:group-hover:opacity-100"
-                      title="删除此记录"
+                        @mousedown.stop="removeSearchHistoryItem(item, $event)"
+                        class="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded text-red-500 dark:text-red-400 transition-all sm:opacity-0 sm:group-hover:opacity-100"
+                        title="删除此记录"
                     >
                       <i class="pi pi-times text-xs"></i>
                     </button>
                   </div>
                 </div>
               </div>
-              <div class="flex flex-col gap-4">
-                <!-- 搜索选项区域 -->
-                <div class="flex flex-col gap-2">
+              <div class="flex flex-col gap-2">
+                <!-- 第一行：搜索指南和作者开关 -->
+                <div class="flex flex-wrap items-center justify-between gap-3">
                   <Message size="small" severity="secondary" variant="simple">
                     <div class=" flex flex-row items-center gap-2">
                       <p>搜索指南</p>
@@ -687,154 +676,105 @@ const backToSearch = () => {
                       </router-link>
                     </div>
                   </Message>
-                  <div class="flex flex-col ">
-                    <RadioButtonGroup v-model="searchStore.target" name="ingredient" class="flex flex-wrap gap-4">
-                      <!-- 纯前端模式选项 -->
-                      <template v-if="!appStore.isApiMode">
-                        <div class="flex items-center gap-2">
-                          <RadioButton inputId="title" value="title" />
-                          <label for="title">标题</label>
-                        </div>
-                        <div class="flex items-center gap-2">
-                          <RadioButton inputId="author" value="author" />
-                          <label for="author">作者</label>
-                        </div>
-                        <div class="flex items-center gap-2">
-                          <RadioButton inputId="both" value="both" />
-                          <label for="both">全部</label>
-                        </div>
-                      </template>
 
-                      <!-- API模式选项 -->
-                      <template v-else>
-                        <div class="flex items-center gap-2">
-                          <RadioButton inputId="title" value="title" />
-                          <label for="title">标题</label>
-                        </div>
-                        <div class="flex items-center gap-2">
-                          <RadioButton inputId="content" value="content" />
-                          <label for="content">正文</label>
-                        </div>
-                        <div class="flex items-center gap-2">
-                          <RadioButton inputId="both" value="both" />
-                          <label for="both">全部</label>
-                        </div>
-                      </template>
-                    </RadioButtonGroup>
-
-                    <!-- 显示作者开关和随机推荐 -->
-                    <div class="flex items-center justify-between gap-4">
-                      <div class="flex items-center gap-2 text-sm">
-                        <input
-                          type="checkbox"
-                          id="show-author"
-                          v-model="showAuthor"
-                          class="w-4 h-4 text-primary focus:ring-primary rounded"
-                        />
-                        <label for="show-author" class="text-surface-600 dark:text-surface-400 cursor-pointer">
-                          显示作者信息
-                        </label>
-                      </div>
-
-                      <!-- 随机推荐按钮 -->
-                      <Button
-                        icon="pi pi-refresh"
-                        label="随机推荐"
-                        aria-label="Random"
-                        @click="fetchRandomRecommendations"
-                        :loading="isLoadingRandom"
-                        severity="secondary"
-                        outlined
-                        size="small"
-                        class="flex-shrink-0"
-                      />
-                    </div>
+                  <!-- 显示作者开关：仅纯前端模式显示 -->
+                  <div v-if="!appStore.isApiMode" class="flex items-center gap-2 text-sm">
+                    <input
+                        type="checkbox"
+                        id="show-author"
+                        v-model="showAuthor"
+                        class="w-4 h-4 text-primary focus:ring-primary rounded"
+                    />
+                    <label for="show-author" class="text-surface-600 dark:text-surface-400 cursor-pointer">
+                      显示作者
+                    </label>
                   </div>
+                </div>
+
+                <!-- 第二行：搜索选项和随机推荐按钮 -->
+                <div class="flex flex-wrap items-center justify-between">
+                  <!-- 搜索选项 -->
+                  <RadioButtonGroup v-model="searchStore.target" name="ingredient" class="flex flex-wrap gap-4">
+                    <!-- 纯前端模式选项 -->
+                    <template v-if="!appStore.isApiMode">
+                      <div class="flex items-center gap-2">
+                        <RadioButton inputId="title" value="title"/>
+                        <label for="title">标题</label>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <RadioButton inputId="author" value="author"/>
+                        <label for="author">作者</label>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <RadioButton inputId="both" value="both"/>
+                        <label for="both">全部</label>
+                      </div>
+                    </template>
+
+                    <!-- API模式选项 -->
+                    <template v-else>
+                      <div class="flex items-center gap-2">
+                        <RadioButton inputId="title" value="title"/>
+                        <label for="title">标题</label>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <RadioButton inputId="content" value="content"/>
+                        <label for="content">正文</label>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <RadioButton inputId="both" value="both"/>
+                        <label for="both">全部</label>
+                      </div>
+                    </template>
+                  </RadioButtonGroup>
+
+                  <!-- 随机推荐按钮：始终在最右侧，仅认证用户可见 -->
+                  <Button
+                      icon="pi pi-sync"
+                      aria-label="Random"
+                      @click="fetchRandomRecommendations"
+                      :loading="isLoadingRandom"
+                      severity="secondary"
+                      outlined
+                      size="small"
+                      label="随机"
+                  />
                 </div>
               </div>
             </div>
           </Form>
 
+          <!-- 未认证用户空状态：完全隐藏小说列表 -->
+<!--          <div class="flex flex-col items-center justify-center py-16">-->
+<!--            <i class="pi pi-book text-6xl text-surface-300 dark:text-surface-600 mb-4"></i>-->
+<!--            <p class="text-surface-500 dark:text-surface-400 text-lg">暂无小说</p>-->
+<!--          </div>-->
+
           <!-- 小说内容 -->
-            <!-- 随机推荐标题 -->
-          <div v-if="showRandomResults" class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-surface-900 dark:text-surface-100">
-              随机推荐结果
-              <span class="text-sm text-surface-600 dark:text-surface-400 ml-2">
-                ({{ randomResults.length }} 本小说)
-              </span>
-            </h2>
-            <Button
-              icon="pi pi-arrow-left"
-              label="返回搜索"
-              severity="secondary"
-              outlined
-              @click="backToSearch"
-              size="small"
-            />
-          </div>
-
-          <!-- 随机推荐加载状态 -->
-          <div class="grid md:grid-cols-2 grid-cols-1 gap-4" v-if="isLoadingRandom">
-            <Skeleton height="15rem"
-              class="transition-colors duration-200 hover:bg-surface-100! dark:hover:bg-surface-800! cursor-pointer"
-              v-for="_ in 10"></Skeleton>
-          </div>
-
-          <!-- 随机推荐结果 -->
-          <div class="columns-1 sm:columns-2 md:columns-3 gap-4" v-else-if="showRandomResults">
-            <a v-for="item in randomResults" :key="item.tid" :href="`/${item.tid}`"
-              @click="e => handleCardClick(e, item.tid)" class="block mb-4 break-inside-avoid">
-              <Card
-                class="transition-colors duration-200 hover:bg-surface-100! dark:hover:bg-surface-800! cursor-pointer">
-                <template #title>
-                  <div class="flex justify-between">
-                    <p class="font-bold break-all mr-2">{{ item.title }}</p>
-                    <i v-if="isFav(item.tid)" class="pi pi-star-fill" @click.stop.prevent="removeFav(item.tid)"
-                      :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
-                    <i v-else class="pi pi-star" @click.stop.prevent="addFav(item.tid, item.title)"
-                      :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
-                  </div>
-                </template>
-                <template #content>
-                  <div class="flex justify-between items-center gap-2">
-                    <p v-if="showAuthor && item.author" class="m-0 text-sm text-gray-400 flex-shrink-0">
-                      作者: {{ item.author || formatAuthorName(getNovelPathInfo(item.tid)) }}
-                    </p>
-                    <p class="m-0 text-sm text-gray-500" :class="{ 'text-right': showAuthor && item.author }">
-                      字数: {{ formatWordCount(item.count) }}
-                    </p>
-                  </div>
-                </template>
-              </Card>
-            </a>
-          </div>
-
-          <!-- 搜索结果 -->
-          <template v-else>
-            <div class="grid md:grid-cols-2 grid-cols-1 gap-4" v-if="isLoading">
+            <!-- 搜索结果或随机推荐结果 -->
+            <div class="grid md:grid-cols-2 grid-cols-1 gap-4" v-if="isLoading || isLoadingRandom">
               <Skeleton height="15rem"
-                class="transition-colors duration-200 hover:bg-surface-100! dark:hover:bg-surface-800! cursor-pointer"
-                v-for="_ in 10"></Skeleton>
+                        class="transition-colors duration-200 hover:bg-surface-100! dark:hover:bg-surface-800! cursor-pointer"
+                        v-for="_ in 10"></Skeleton>
             </div>
             <div class="columns-1 sm:columns-2 md:columns-3 gap-4" v-else>
               <a v-for="item in searchStore.records" :key="item.tid" :href="`/${item.tid}`"
-                @click="e => handleCardClick(e, item.tid)" class="block mb-4 break-inside-avoid">
+                 @click="e => handleCardClick(e, item.tid)" class="block mb-4 break-inside-avoid">
                 <Card
-                  class="transition-colors duration-200 hover:bg-surface-100! dark:hover:bg-surface-800! cursor-pointer">
+                    class="transition-colors duration-200 hover:bg-surface-100! dark:hover:bg-surface-800! cursor-pointer">
                   <template #title>
                     <div class="flex justify-between">
                       <p class="font-bold break-all mr-2">{{ item.title }}</p>
                       <i v-if="isFav(item.tid)" class="pi pi-star-fill" @click.stop.prevent="removeFav(item.tid)"
-                        :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
+                         :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
                       <i v-else class="pi pi-star" @click.stop.prevent="addFav(item.tid, item.title)"
-                        :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
+                         :style="{ color: 'var(--p-button-primary-background)', fontSize: '1.5rem' }"></i>
                     </div>
                   </template>
                   <template #content>
                     <div class="flex justify-between items-center gap-2">
                       <p v-if="showAuthor && item.author" class="m-0 text-sm text-gray-400 flex-shrink-0">
-                        作者: {{ formatAuthorName(getNovelPathInfo(item.tid)) }}
+                        作者: {{ item.author || formatAuthorName(getNovelPathInfo(item.tid)) }}
                       </p>
                       <p class="m-0 text-sm text-gray-500" :class="{ 'text-right': showAuthor && item.author }">
                         字数: {{ formatWordCount(item.count) }}
@@ -844,19 +784,19 @@ const backToSearch = () => {
                 </Card>
               </a>
             </div>
-          </template>
-          <!-- 分页器 - 只在搜索模式下显示 -->
-          <div v-if="!showRandomResults">
-            <Paginator :rows=rows :totalRecords=searchStore.total v-model:first="offset" @page="onPageChange"
-              v-if="searchStore.total !== 0" :template="{
-                // '480px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput',
-                // '640px': 'PrevPageLink CurrentPageReport NextPageLink',
-                // '960px': 'FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink',
-                // '1300px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
-                default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput'
-              }">
-            </Paginator>
-          </div>
+
+            <!-- 分页器 -->
+            <div>
+              <Paginator :rows=rows :totalRecords=searchStore.total v-model:first="offset" @page="onPageChange"
+                         v-if="searchStore.total !== 0" :template="{
+                  // '480px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput',
+                  // '640px': 'PrevPageLink CurrentPageReport NextPageLink',
+                  // '960px': 'FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink',
+                  // '1300px': 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink',
+                  default: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageDropdown JumpToPageInput'
+                }">
+              </Paginator>
+            </div>
         </div>
       </div>
     </div>
@@ -864,12 +804,12 @@ const backToSearch = () => {
 
   <!-- 添加小说对话框 -->
   <AddNovelDialog
-    v-model="showAddNovelDialog"
-    @added="handleNovelAdded"
+      v-model="showAddNovelDialog"
+      @added="handleNovelAdded"
   />
 
   <!-- API设置对话框 -->
   <ApiSettingsDialog
-    v-model="appStore.showApiSettings"
+      v-model="appStore.showApiSettings"
   />
 </template>
